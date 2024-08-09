@@ -12,16 +12,18 @@ public class RouteParser {
         List<Edge> edges = new ArrayList<>();
         Gson gson = new Gson();
         JsonObject obj = gson.fromJson(jsonResponse, JsonObject.class);
-        JsonArray paths = obj.getAsJsonArray("paths");
+        JsonArray routes = obj.getAsJsonArray("routes");
 
-        if (paths.size() > 0) {
-            JsonArray instructions = paths.get(0).getAsJsonObject().getAsJsonArray("instructions");
-            for (int i = 0; i < instructions.size() - 1; i++) {
-                JsonObject current = instructions.get(i).getAsJsonObject();
-                JsonObject next = instructions.get(i + 1).getAsJsonObject();
-                String start = current.get("text").getAsString();
-                String end = next.get("text").getAsString();
-                int distance = current.get("distance").getAsInt();
+        if (routes.size() > 0) {
+            JsonArray legs = routes.get(0).getAsJsonObject().getAsJsonArray("legs");
+            JsonArray steps = legs.get(0).getAsJsonObject().getAsJsonArray("steps");
+
+            for (int i = 0; i < steps.size() - 1; i++) {
+                JsonObject currentStep = steps.get(i).getAsJsonObject();
+                JsonObject nextStep = steps.get(i + 1).getAsJsonObject();
+                String start = currentStep.getAsJsonObject("start_location").toString();
+                String end = nextStep.getAsJsonObject("end_location").toString();
+                int distance = currentStep.getAsJsonObject("distance").get("value").getAsInt();
                 edges.add(new Edge(start, end, distance));
             }
         }
