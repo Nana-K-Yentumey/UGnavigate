@@ -10,7 +10,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 public class GoogleMapsGeocoder {
-    private static final String API_KEY = "AIzaSyCNqp_FggdkoP_bVGHSGNBzhyCFLsgnoxE";
+    private static final String API_KEY = "API_KEY";
     private static final String BASE_URL = "https://maps.googleapis.com/maps/api/geocode/json";
 
     public String[] getCoordinates(String location) throws IOException {
