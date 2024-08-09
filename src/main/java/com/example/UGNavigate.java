@@ -1,34 +1,43 @@
 package com.example;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class UGNavigate {
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        GoogleMapsGeocoder geocoder = new GoogleMapsGeocoder();
-        GoogleMapsAPI googleMapsAPI = new GoogleMapsAPI();
-
-        System.out.println("Enter the start location: ");
-        String startLocation = scanner.nextLine();
-
-        System.out.println("Enter the end location: ");
-        String endLocation = scanner.nextLine();
-
         try {
-            String[] startCoords = geocoder.getCoordinates(startLocation);
-            String[] endCoords = geocoder.getCoordinates(endLocation);
+            EnvLoader envLoader = new EnvLoader(".env");
+            String apiKey = envLoader.get("API_KEY");
 
-            String start = startCoords[0] + "," + startCoords[1];
-            String end = endCoords[0] + "," + endCoords[1];
+            System.out.println("Your API Key is: " + apiKey);
 
-            String jsonResponse = googleMapsAPI.getDirections(start, end);
-            googleMapsAPI.parseAndDisplayDirections(jsonResponse);
+            GoogleMapsGeocoder geocoder = new GoogleMapsGeocoder(apiKey);
+            GoogleMapsAPI googleMapsAPI = new GoogleMapsAPI(apiKey); // Pass API key to GoogleMapsAPI
+
+            Scanner scanner = new Scanner(System.in);
+
+            System.out.println("Enter the start location: ");
+            String startLocation = scanner.nextLine();
+
+            System.out.println("Enter the end location: ");
+            String endLocation = scanner.nextLine();
+
+            try {
+                String[] startCoords = geocoder.getCoordinates(startLocation);
+                String[] endCoords = geocoder.getCoordinates(endLocation);
+
+                String start = startCoords[0] + "," + startCoords[1];
+                String end = endCoords[0] + "," + endCoords[1];
+
+                String jsonResponse = googleMapsAPI.getDirections(start, end);
+                googleMapsAPI.parseAndDisplayDirections(jsonResponse);
+
+            } catch (IOException e) {
+                System.out.println("Failed to fetch route data: " + e.getMessage());
+            }
 
         } catch (IOException e) {
-            System.out.println("Failed to fetch route data: " + e.getMessage());
+            System.out.println("Failed to load .env file: " + e.getMessage());
         }
     }
 }

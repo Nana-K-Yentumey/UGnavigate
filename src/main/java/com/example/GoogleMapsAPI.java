@@ -1,4 +1,5 @@
 package com.example;
+
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -8,11 +9,16 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 public class GoogleMapsAPI {
-    private static final String API_KEY = "AIzaSyCNqp_FggdkoP_bVGHSGNBzhyCFLsgnoxE";
+    private String apiKey;
     private static final String DIRECTIONS_URL = "https://maps.googleapis.com/maps/api/directions/json";
 
+    // Constructor that accepts the API key
+    public GoogleMapsAPI(String apiKey) {
+        this.apiKey = apiKey;
+    }
+
     public String getDirections(String startCoords, String endCoords) throws IOException {
-        String urlString = DIRECTIONS_URL + "?origin=" + startCoords + "&destination=" + endCoords + "&key=" + API_KEY;
+        String urlString = DIRECTIONS_URL + "?origin=" + startCoords + "&destination=" + endCoords + "&key=" + apiKey;
         URL url = new URL(urlString);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");

@@ -6,7 +6,7 @@ import java.net.URL;
 import java.util.Scanner;
 
 public class GoogleMapsDirections {
-    private static final String API_KEY = "AIzaSyCNqp_FggdkoP_bVGHSGNBzhyCFLsgnoxE";
+    private static final String API_KEY = "API_kEY";
     private static final String BASE_URL = "https://maps.googleapis.com/maps/api/directions/json";
 
     public String getRoute(String start, String end) throws IOException {

@@ -10,12 +10,16 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 public class GoogleMapsGeocoder {
-    private static final String API_KEY = "API_KEY";
+    private String apiKey;
     private static final String BASE_URL = "https://maps.googleapis.com/maps/api/geocode/json";
+
+    public GoogleMapsGeocoder(String apiKey) {
+        this.apiKey = apiKey;
+    }
 
     public String[] getCoordinates(String location) throws IOException {
         String encodedLocation = URLEncoder.encode(location + ", University of Ghana", StandardCharsets.UTF_8.toString());
-        String urlString = BASE_URL + "?address=" + encodedLocation + "&key=" + API_KEY;
+        String urlString = BASE_URL + "?address=" + encodedLocation + "&key=" + apiKey;
         System.out.println("Request URL: " + urlString); // Debug print
         URL url = new URL(urlString);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -35,7 +39,11 @@ public class GoogleMapsGeocoder {
         scanner.close();
 
         JsonObject jsonObject = JsonParser.parseString(response.toString()).getAsJsonObject();
-        JsonObject locationObject = jsonObject.getAsJsonArray("results").get(0).getAsJsonObject().getAsJsonObject("geometry").getAsJsonObject("location");
+        JsonObject locationObject = jsonObject.getAsJsonArray("results")
+                                            .get(0)
+                                            .getAsJsonObject()
+                                            .getAsJsonObject("geometry")
+                                            .getAsJsonObject("location");
         String lat = locationObject.get("lat").getAsString();
         String lng = locationObject.get("lng").getAsString();
 

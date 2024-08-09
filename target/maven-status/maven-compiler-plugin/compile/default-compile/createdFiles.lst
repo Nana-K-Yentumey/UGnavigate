@@ -6,6 +6,7 @@ com\example\GoogleMapsAPI.class
 com\example\Node.class
 com\example\Route.class
 com\example\RouteParser.class
+com\example\EnvLoader.class
 com\example\QuickSort.class
 com\example\UGNavigate.class
 com\example\Edge.class
