@@ -38,28 +38,32 @@ public class GoogleMapsAPI {
         return response.toString();
     }
 
-    public void parseAndDisplayDirections(String jsonResponse) {
+    public String parseAndDisplayDirections(String jsonResponse) {
+        StringBuilder directions = new StringBuilder();
         JsonObject jsonObject = JsonParser.parseString(jsonResponse).getAsJsonObject();
         JsonArray routes = jsonObject.getAsJsonArray("routes");
-
+    
         if (routes.size() > 0) {
             JsonObject route = routes.get(0).getAsJsonObject();
             JsonArray legs = route.getAsJsonArray("legs");
             JsonObject leg = legs.get(0).getAsJsonObject();
             JsonArray steps = leg.getAsJsonArray("steps");
-
-            System.out.println("Directions:");
-
+    
+            directions.append("Directions:\n");
+    
             for (int i = 0; i < steps.size(); i++) {
                 JsonObject step = steps.get(i).getAsJsonObject();
                 String instruction = step.get("html_instructions").getAsString().replaceAll("<[^>]*>", "");
                 String distance = step.getAsJsonObject("distance").get("text").getAsString();
                 String duration = step.getAsJsonObject("duration").get("text").getAsString();
                 
-                System.out.println((i + 1) + ". " + instruction + " (" + distance + ", " + duration + ")");
+                directions.append((i + 1) + ". " + instruction + " (" + distance + ", " + duration + ")\n");
             }
         } else {
-            System.out.println("No routes found.");
+            directions.append("No routes found.");
         }
+    
+        return directions.toString();
     }
+    
 }
